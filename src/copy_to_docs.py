@@ -1,16 +1,16 @@
 import os 
 import shutil
 
-public_path = "./public"
+docs_path = "./docs"
 static_path = "./static"
 
-def delete_from_public():
+def delete_from_docs():
     # print('Removing all from public')
-    if os.path.exists(public_path):
-        shutil.rmtree(public_path)
-    os.mkdir(public_path)
+    if os.path.exists(docs_path):
+        shutil.rmtree(docs_path)
+    os.mkdir(docs_path)
 
-def copy_to_public(path, public_dir):
+def copy_to_docs(path, public_dir):
     # print(" ")
     # print(os.listdir(path))
 
@@ -25,13 +25,13 @@ def copy_to_public(path, public_dir):
             completed.append(joined_path)
         if os.path.isdir(joined_path):
             # print(f"\nRecursion will happen")
-            public_dir = os.path.join(public_path, item)
+            public_dir = os.path.join(docs_path, item)
             # print(f"\nPublic_dir is now {public_dir}")
             os.mkdir(public_dir)
-            recursion_result = copy_to_public(joined_path, public_dir)
+            recursion_result = copy_to_docs(joined_path, public_dir)
             completed.extend(recursion_result)
         # print(f"\nCompleted at the end of the iteration = {completed}")
     return completed
 
-# delete_from_public()
-# copy_to_public(static_path, public_path)
+# delete_from_docs()
+# copy_to_docs(static_path, docs_path)
