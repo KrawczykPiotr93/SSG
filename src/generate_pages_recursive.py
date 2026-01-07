@@ -1,7 +1,8 @@
 import os
 from markdown_to_html import markdown_to_html_node
 from extraxt_title import extract_title
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, content_root):
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, content_root, basepath):
     directory_contents = os.listdir(dir_path_content)
 
     for directory in directory_contents:
@@ -9,7 +10,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, con
         relative_path = os.path.relpath(directory_filepath, content_root)
 
         if not os.path.isfile(directory_filepath):
-            generate_pages_recursive(directory_filepath, template_path, dest_dir_path, content_root)
+            generate_pages_recursive(directory_filepath, template_path, dest_dir_path, content_root, basepath)
 
         if os.path.isfile(directory_filepath): 
             with open(directory_filepath, "r") as f:
@@ -20,7 +21,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, con
 
             contents_in_html = markdown_to_html_node(markdown).to_html()
             title = extract_title(markdown)
-            template = template.replace("{{ Title }}", title).replace("{{ Content }}", contents_in_html)
+            template = template.replace("{{ Title }}", title).replace("{{ Content }}", contents_in_html).replace("href=/", f"href={basepath}").replace("src=/", f"src={basepath}")
+            print(template)
 
             dest_path = os.path.join(dest_dir_path, relative_path)
             dest_path = os.path.splitext(dest_path)[0] + ".html"
